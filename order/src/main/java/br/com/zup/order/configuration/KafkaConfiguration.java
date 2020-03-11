@@ -27,13 +27,23 @@ public class KafkaConfiguration {
     public KafkaAdmin kafkaAdmin() {
         Map<String, Object> configs = new HashMap<>();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap);
+        configs.put(AdminClientConfig.REQUEST_TIMEOUT_MS_CONFIG, 100000);
         return new KafkaAdmin(configs);
     }
 
     @Bean
-    public NewTopic message() {
+    public NewTopic createdOrders() {
         return new NewTopic("created-orders", 1, (short) 1);
     }
+    @Bean
+    public NewTopic inventoryValidateFailed() {
+        return new NewTopic("inventory-validate-failed", 1, (short) 1);
+    }
+    @Bean
+    public NewTopic inventoryValidateSuccess() {
+        return new NewTopic("inventory-validate-success", 1, (short) 1);
+    }
+
 
     @Bean
     public DefaultKafkaProducerFactory messageProducerFactory() {
@@ -43,6 +53,7 @@ public class KafkaConfiguration {
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 100000);
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
@@ -59,6 +70,7 @@ public class KafkaConfiguration {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

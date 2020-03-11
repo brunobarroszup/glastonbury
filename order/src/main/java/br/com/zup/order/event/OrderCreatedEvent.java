@@ -1,10 +1,12 @@
 package br.com.zup.order.event;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class OrderCreatedEvent {
+public class OrderCreatedEvent implements Serializable {
 
+    private static final long serialVersionUID = -4251885571746868051L;
     private String orderId;
     private String customerId;
     private BigDecimal amount;
